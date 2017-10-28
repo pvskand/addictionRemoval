@@ -1,0 +1,19 @@
+#maindiv{
+	background-color: #dbf1ff;
+	padding-top: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-style: groove;
+	width: 50%;	
+}
+
+
+.names{
+	display: inline-block;
+	text-align: left;
+	padding-right: 10px;
+}
+
+.eleregis{
+	text-align: center;
+}
