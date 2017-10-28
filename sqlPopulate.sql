@@ -200,10 +200,10 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `addictionRemoval`;
-INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `age`, `isDoc`) VALUES ('Doc1', 'doc1', 'doc1@gmail.com', 3.5, '2017-10-28', '9565485622', 'Delhi', '1987-12-25', 0, 53, 1);
-INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `age`, `isDoc`) VALUES ('Doc2', 'doc2', 'doc2@gmail.com', 2.5, '2017-10-28', '9565484622', 'Bombay', '1987-08-15', 0, 50, 1);
-INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `age`, `isDoc`) VALUES ('User1', 'user1', 'user1@gmail.com', 2, '2017-10-28', '9545785233', 'Chandigarh', '1985-10-10', 0, 40, 0);
-INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `age`, `isDoc`) VALUES ('User2', 'user2', 'user2@gmail.com', 3, '2017-10-28', '9546765433', 'Kolkata', '1985-09-09', 0, 35, 0);
+INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('Doc1', 'doc1', 'doc1@gmail.com', 3.5, '2017-10-28', '9565485622', 'Delhi', '1987-12-25', 0, 1);
+INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('Doc2', 'doc2', 'doc2@gmail.com', 2.5, '2017-10-28', '9565484622', 'Bombay', '1987-08-15', 0, 1);
+INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('User1', 'user1', 'user1@gmail.com', 2, '2017-10-28', '9545785233', 'Chandigarh', '1985-10-10', 0, 0);
+INSERT INTO `addictionRemoval`.`Member` (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('User2', 'user2', 'user2@gmail.com', 3, '2017-10-28', '9546765433', 'Kolkata', '1985-09-09', 0, 0);
 
 COMMIT;
 
