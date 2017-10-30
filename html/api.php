@@ -42,6 +42,27 @@ include("../config/connect.php");
 
 
 	}
+	function getAddictions($conn)
+	{
+		$addictions = "SELECT addictionName FROM Addictions;";
+
+		$addictionsResult = $conn->query($addictions);
+		$addictionArray = array();
+
+
+		if ($addictionsResult->num_rows > 0) 
+		{
+			while($row = mysqli_fetch_assoc($addictionsResult)) 
+			{
+				$addiction = $row["addictionName"];
+				// echo $addiction;
+				array_push($addictionArray, "$addiction");
+			} 
+		}
+		// echo $addictionArray[1];
+		return $addictionArray;
+
+	}
 
 
 

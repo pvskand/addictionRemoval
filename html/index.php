@@ -19,7 +19,7 @@ include("../html/api.php");
 <div id="mySidenav" class="sidenav">
   <a href="#">Home</a>
   <a href="#">Chats</a>
-  <a href="#">Find Counselor</a>
+  <a href="addictions.php">Find Counselor</a>
   <a href="#">Rewards</a>
   <a href="#">Rehabilitation Centers</a>
   <a href="#">Logout</a>

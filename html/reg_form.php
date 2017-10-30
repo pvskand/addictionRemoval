@@ -5,7 +5,7 @@ include("./api.php");
 
 
 $firstname = $_POST['FirstName'];
-$lasname = $_POST['LastName'];
+$lastname = $_POST['LastName'];
 $phonenumber = $_POST['PhoneNumber'];
 $dob = $_POST['DateofBirth'];
 $city = $_POST['city'];
