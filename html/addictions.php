@@ -13,13 +13,14 @@
 	require '../OAuth/google_auth.php';
 
 	$addictionArray = getAddictions($conn);
+	$str="addiction";
 	$i=0;
 	for ($i;$i<count($addictionArray);$i++)
 	{
 		$image_name = strtolower($addictionArray[$i]);
 		echo '
 			<div class="gallery">
-				<a href="addi_form.php?' .$image_name. '=true" ><img src="../images/'. $image_name. '.jpg" alt="drugs" width="300" height="200" ></a>
+				<a href="addi_form.php?' .$str. '='.$image_name.'" ><img src="../images/'. $image_name. '.jpg" alt="drugs" width="300" height="200" ></a>
 			<div class="desc">'. $addictionArray[$i]. '</div>
 			</div>';
 }

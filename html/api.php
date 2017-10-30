@@ -36,7 +36,7 @@ include("../config/connect.php");
 	{
 		// $dateToday
 		$date = date('Y-m-d');
-		$add = "INSERT INTO Member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '0', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
+		$add = "INSERT INTO Member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
 		$stmt = $conn->prepare($add);
 		$stmt->execute();
 
@@ -62,6 +62,121 @@ include("../config/connect.php");
 		// echo $addictionArray[1];
 		return $addictionArray;
 
+	}
+
+	function Matching_algo($email,$addiction,$conn)
+	{
+		$q="SELECT member_had_addictions.member_email from member,member_had_addictions where member.isBanned=0 and member_had_addictions.addictions_addictionName='$addiction' and member.email=member_had_addictions.member_email";
+		$result=$conn->query($q);
+
+		
+
+
+		$data = array(); 
+		$count=0;
+		while($row = mysqli_fetch_assoc($result)) 
+		{
+			$data[] = $row;
+			$count++;
+
+		}
+
+		
+		$i=0;
+		while($i<$count)
+		{
+			$name=$data[$i]["member_email"];
+			$q="SELECT count(counsellor_email) FROM `case` WHERE `case`.counsellor_email= '$name'";
+			$result=$conn->query($q);
+			$row = mysqli_fetch_assoc($result);
+			$data[$i]["count(counsellor_email)"]=$row["count(counsellor_email)"];
+			$q="SELECT rating,isdoc FROM member WHERE member.email='$name'";
+			$result = $conn->query($q);
+			$row = mysqli_fetch_assoc($result);
+			$data[$i]["rating"]=$row["rating"];
+			$data[$i]["isdoc"]=$row["isdoc"];
+			$i++;
+		}
+
+
+		$i=0;
+		$min=10000;
+		while($i<$count)
+		{
+			
+			if($min > $data[$i]["count(counsellor_email)"])
+			{
+				$min=$data[$i]["count(counsellor_email)"];
+			}
+			
+			$i++;
+		}
+
+		$i=0;
+		$max_doc_rating=-1000; $max_doc_index = -1;
+		$max_user_rating=-1000; $max_user_index = -1;
+		while($i<$count)
+		{
+			
+			if($min === $data[$i]["count(counsellor_email)"])
+			{
+				if($data[$i]["isdoc"] == 1 && $max_doc_rating < $data[$i]["rating"])
+				{
+					$max_doc_rating = $data[$i]["rating"];
+					$max_doc_index = $i;
+				} 
+				else if ($data[$i]["isdoc"] == 0 && $max_user_rating < $data[$i]["rating"])
+				{
+					$max_user_rating = $data[$i]["rating"];
+					$max_user_index = $i;
+				}
+			}
+			
+			$i++;
+		}
+		$i=0;
+
+		if($max_doc_index == -1 && $max_user_index == -1)
+		{
+			echo 'no user found';
+		}
+		else if ($max_user_index == -1) 
+		{
+			return $data[$max_doc_index]["member_email"];
+		}
+		else if ($max_doc_index == -1) 
+		{
+			return $data[$max_user_index]["member_email"];
+		}
+		else
+		{
+			if($max_doc_rating > $max_user_rating)
+			{
+				return $data[$max_doc_index]["member_email"];
+			}
+			else
+			{
+				if($max_user_rating-$max_doc_rating > 400)
+				{
+					return $data[$max_user_index]["member_email"];
+				}
+				else
+				{
+					return $data[$max_doc_index]["member_email"];
+				}
+			}
+		}
+		
+
+	}
+
+
+	function update_case_table($conn,$counsellor_email,$patient_email,$add_type)
+	{
+		$q="INSERT INTO `case`(`isCompleted`, `counsellor_email`, `patient_email`, `startDate`, `endDate`, `Addictions_addictionName`) VALUES ('0','$counsellor_email','$patient_email',date('Y-m-d'),'2000-01-01','$add_type')";
+
+		$stmt = $conn->prepare($q);
+		$stmt->execute();
 	}
 
 

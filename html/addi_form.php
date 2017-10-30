@@ -4,11 +4,15 @@ include("../config/connect.php");
 include("./api.php");
 
 
-$firstname = $_GET['drinking'];
-echo $firstname;
+$add_type = $_GET['addiction'];
 
-// addUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $isDoc, $conn);
-// header("Location:http://localhost/addictionRemoval/html/index.php");
+
+$counsellor_email=Matching_algo($email,$add_type,$conn);
+echo $counsellor_email;
+echo $add_type;
+update_case_table($conn,$counsellor_email,$email,$add_type);
+
+
 
 
 
