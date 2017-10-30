@@ -48,6 +48,7 @@ $plus = new Google_Service_Plus($client);
  */
 if (isset($_REQUEST['logout'])) {
    session_unset();
+   header("Location:http://localhost/addictionRemoval/OAuth/google_auth.php");
 }
 /* 
  * B. AUTHORIZATION AND ACCESS TOKEN
