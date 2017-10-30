@@ -19,7 +19,7 @@
 	<form id="form" name="form" method="post" action="reg_form.php">
 
 	<center>
-	<div align = "left" id="maindiv">
+	<div id="maindiv">
 		<center>
 			<h1> Registration </h1>
 		</center>
