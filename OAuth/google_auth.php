@@ -85,9 +85,11 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
 
 ?>
 
-<!-- HTML CODE with Embeded PHP-->
+<head>
+  <link rel="stylesheet" href="../css/loginpage.css" />
+</head>
 
-<body>
+<body background="../images/addicts.jpg">
 
 
     <?php
@@ -98,7 +100,13 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     if (isset($authUrl)) 
     {
         
-
+        echo '<center><div id="boxLogin"><br><br><br><h1 id="titleHeader"> Addiction Removal </h1>  ';
+        echo '<p id="aboutApp"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p></div></center>';
         echo "<center><a class='login' href='" . $authUrl . "'><img src='gplus-lib/signin_button.png' height='50px' align='middle'/></a></center>";
         print "<br><br>";
         
