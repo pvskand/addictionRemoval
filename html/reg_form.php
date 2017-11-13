@@ -1,7 +1,7 @@
 <?php 
 require '../OAuth/google_auth.php';
 include("../config/connect.php");
-include("./api.php");
+include("api.php");
 
 
 $firstname = $_POST['FirstName'];

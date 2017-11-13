@@ -83,7 +83,6 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   // get the login url   
   $authUrl = $client->createAuthUrl();
 }
-
 ?>
 
 <head>
@@ -111,12 +110,10 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         echo "<center><a class='login' href='" . $authUrl . "'><img src='gplus-lib/signin_button.png' height='50px' align='middle'/></a></center>";
         print "<br><br>";
         
-    } 
-    else 
+    }
+    else
     {
-        echo"<br><br>";
-        echo "<center><a class='logout' href='?logout' align='middle'><button>Logout</button></a></center>";
-
+      echo"<center> <a position='floating' id ='logoutBtn' class='logout' href='?logout'> Logout </a></center>";
     }
     ?>
 

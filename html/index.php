@@ -8,7 +8,7 @@
 <body bgcolor="#C4EEA2">
 
 <?php 
-
+require '../OAuth/google_auth.php';
 include("../config/connect.php");
 include("../html/api.php");
 
@@ -27,7 +27,7 @@ include("../html/api.php");
   <a href="#">Rewards</a><br>
   <a href="#">Rehabilitation Centers</a><br>
   <a href="setting.php">Settings</a><br>
-  <a href="#">Logout</a><br>
+  <a href="?logout"> Logout </a><br>
 </div>
 
 <div class="main">
