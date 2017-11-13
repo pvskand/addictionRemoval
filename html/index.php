@@ -50,7 +50,7 @@ if ($blogResult->num_rows > 0)
 	// output data of each row
     while($row = $blogResult->fetch_assoc()) {
         
-        $email = $row["Doctor_Member_email"];
+        $email = $row["doctor_member_email"];
         $docName = getDocName($email, $conn);
         echo '<div class="divBlog">
         <p class ="blogTitle">'. $row["title"]. '</p> <p class="docNameBlog">'.$docName.'</p>
