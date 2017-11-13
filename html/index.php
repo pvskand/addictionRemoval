@@ -42,7 +42,7 @@ include("../html/api.php");
 
 // showing the feed with blogs written by different doctors.
 
-$blog = "SELECT * FROM Blog";
+$blog = "SELECT * FROM blog";
 $blogResult = $conn->query($blog);
 
 if ($blogResult->num_rows > 0) 

@@ -6,7 +6,7 @@ include("../config/connect.php");
 
 	function getDocName($email, $conn) 
 	{
-		$doc = "SELECT * FROM Member WHERE email='$email' LIMIT 1";
+		$doc = "SELECT * FROM member WHERE email='$email' LIMIT 1";
 
 		
 		$docResult = $conn->query($doc);
@@ -22,7 +22,7 @@ include("../config/connect.php");
 
 	function userInDB($email, $conn)
 	{
-		$user = "SELECT * FROM Member WHERE email='$email'";
+		$user = "SELECT * FROM member WHERE email='$email'";
 
 		$userResult = $conn->query($user);
 		if ($userResult->num_rows > 0) 
@@ -36,7 +36,7 @@ include("../config/connect.php");
 	{
 		// $dateToday
 		$date = date('Y-m-d');
-		$add = "INSERT INTO Member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
+		$add = "INSERT INTO member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
 		$stmt = $conn->prepare($add);
 		$stmt->execute();
 
@@ -55,7 +55,7 @@ include("../config/connect.php");
 	}
 	function getAddictions($conn)
 	{
-		$addictions = "SELECT addictionName FROM Addictions;";
+		$addictions = "SELECT addictionName FROM addictions;";
 
 		$addictionsResult = $conn->query($addictions);
 		$addictionArray = array();
