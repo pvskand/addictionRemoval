@@ -26,7 +26,7 @@ include("../html/api.php");
   <a href="addictions.php">Find Counselor</a><br>
   <a href="#">Rewards</a><br>
   <a href="#">Rehabilitation Centers</a><br>
-  <a href="#">Settings</a><br>
+  <a href="setting.php">Settings</a><br>
   <a href="#">Logout</a><br>
 </div>
 

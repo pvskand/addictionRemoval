@@ -32,6 +32,50 @@ include("../config/connect.php");
 		return 0;
 		
 	}
+	// get user details to display in setting.php
+	function getUserDetails($email, $conn)
+	{
+		$get = "SELECT firstname, lastname, rating, phoneNumber, city, dob FROM member WHERE email='$email';";
+		$getResult = $conn->query($get);
+		$getArray = array();
+		if ($getResult->num_rows > 0) 
+		{
+			while($row = mysqli_fetch_assoc($getResult)) 
+			{
+				$firstname = $row["firstname"];
+				array_push($getArray, "$firstname");
+				$lastname = $row["lastname"];
+				array_push($getArray, "$lastname");
+				$rating = $row["rating"];
+				array_push($getArray, "$rating");
+				$phoneNumber = $row["phoneNumber"];
+				array_push($getArray, "$phoneNumber");
+				$city = $row["city"];
+				array_push($getArray, "$city");
+				$dob = $row["dob"];
+				array_push($getArray, "$dob");
+				
+			} 
+		}
+		return $getArray;
+
+	}
+	// Update user
+	function updateUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $conn)
+	{
+		$update = "UPDATE `addictionRemoval`.`member` SET `firstname`='$firstname', `lastname`='$lastname', `phoneNumber`='$phonenumber', `city`='$city', `dob`='$dob' WHERE `email`='$email';";
+		$getUpdate = $conn->query($update);
+		if ($getUpdate)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+
 	function addUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $isDoc, $conn)
 	{
 		// $dateToday
