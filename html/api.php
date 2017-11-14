@@ -2,6 +2,21 @@
 include("../config/connect.php");
 
 
+
+	function isDoc($email, $conn)
+	{
+		$doc = "SELECT isDoc FROM member WHERE email='$email' LIMIT 1";
+		$docResult = $conn->query($doc);
+		$doc_status = "";
+		while($row = mysqli_fetch_assoc($docResult)) 
+		{
+			$doc_status = $row["isDoc"];
+		}
+		return $doc_status;
+	}
+
+
+
 // Get the doctor's name for writing in the feed from the Membe table
 
 	function getDocName($email, $conn) 
@@ -81,6 +96,7 @@ include("../config/connect.php");
 		// $dateToday
 		$date = date('Y-m-d');
 		$add = "INSERT INTO member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
+		echo $add;
 		$stmt = $conn->prepare($add);
 		$stmt->execute();
 
@@ -250,6 +266,7 @@ include("../config/connect.php");
 	{
 
 		$add_blog="INSERT INTO blog (`message`, `title`, `timestamp`, `doctor_member_email`) VALUES ('$msg', '$title', '$time', '$email');";
+		echo $add_blog;
 		$stmt = $conn->prepare($add_blog);
 		if($stmt==true)
 		{

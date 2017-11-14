@@ -104,7 +104,7 @@
 								<div layout="row" layout-sm="column">
 										<md-input-container flex-gt-sm="">
 												<label>Birthdate</label>
-												<input placeholder="01-01-2001" class="form-control" type="text" onfocus="(this.type='')" onblur="(this.type='01-01-2001')" name="DateofBirth" id="DOB">
+												<input placeholder="2001-01-01" class="form-control" type="text" onfocus="(this.type='')" onblur="(this.type='2001-01-01')" name="DateofBirth" id="DOB">
 													
 										</md-input-container>
 								</div>

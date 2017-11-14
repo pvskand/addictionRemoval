@@ -12,6 +12,8 @@ require '../OAuth/google_auth.php';
 include("../config/connect.php");
 include("../html/api.php");
 
+$is_doc_status = isDoc($email, $conn);
+
 ?>
 
 
@@ -21,9 +23,19 @@ include("../html/api.php");
     <img src="../images/profile.png" id="profilePhoto" />
   </div>
   <div id="seperate"> </div>
-  <a href="#">Home</a><br>
+  <a href="index.php">Home</a><br>
   <a href="#">Chats</a><br>
-  <a href="addictions.php">Find Counselor</a><br>
+  <?php
+    if($is_doc_status == 1)
+    {
+      echo '<a href="blog.php">Blog</a><br>';
+    }
+    else
+    {
+      echo '<a href="addictions.php">Find Counselor</a><br>';
+    }
+  ?>
+  <!-- <a href="addictions.php">Find Counselor</a><br> -->
   <a href="#">Rewards</a><br>
   <a href="#">Rehabilitation Centers</a><br>
   <a href="setting.php">Settings</a><br>
@@ -53,10 +65,11 @@ if ($blogResult->num_rows > 0)
         $email = $row["doctor_member_email"];
         $docName = getDocName($email, $conn);
         echo '<div class="divBlog">
-        <p class ="blogTitle">'. $row["title"]. '</p> <p class="docNameBlog">'.$docName.'</p>
+        <p class ="blogTitle">'. $row["title"]. '</p> <p class="docNameBlog"> Dr.'.$docName.'</p>
         <p class="blogContent">'.$row["message"]. '</p>
+
         </div>';
-        
+       
     }
 }
 else
