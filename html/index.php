@@ -22,11 +22,11 @@ $is_doc_status = isDoc($email, $conn);
   </div>
   <div id="seperate"> </div>
   <a href="index.php">Home</a><br>
-  <a href="#">Chats</a><br>
+  <a href="chat.php">Chats</a><br>
   <?php
     if($is_doc_status == 1)
     {
-      echo '<a href="blog.php">Blog</a><br>';
+      echo '<a href="blog.php">Write Blog</a><br>';
     }
     else
     {

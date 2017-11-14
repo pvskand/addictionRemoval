@@ -14,6 +14,18 @@
 </head>
 <body bgcolor="#C4EEA2">
 
+<style type="text/css">
+    
+   img {
+    width: 100%;
+    height: 150px;
+}
+
+
+</style>
+
+
+
 <?php 
 
 include("../config/connect.php");
@@ -30,8 +42,8 @@ $is_doc_status = isDoc($email, $conn);
     <img src="../images/profile.png" id="profilePhoto" />
   </div>
   <div id="seperate"> </div>
-  <a href="#">Home</a><br>
-  <a href="#">Chats</a><br>
+  <a href="index.php">Home</a><br>
+  <a href="chat.php">Chats</a><br>
   <?php
     if($is_doc_status == 1)
     {
@@ -125,7 +137,7 @@ $is_doc_status = isDoc($email, $conn);
               {
               echo '<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                         <a href="" class="quiz-answer multiple-answers" data-question="1" data-answer="1">
-                          <img class="quizitems" src="../images/'. $image_name. '.jpg" alt="">
+                          <img class="quizitems" src="../images/'. $image_name. '.jpg" width="200" height="150">
                         </a>
                         <center><input  type="checkbox" name='. $image_name . ' value='. $image_name .' , id="doc">'. $image_name .'<br></center> <br>
                         
@@ -136,7 +148,7 @@ $is_doc_status = isDoc($email, $conn);
                 echo '<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                         <a href="" class="quiz-answer multiple-answers" data-question="1" data-answer="1">
                           
-                          <img class="quizitems" src="../images/'. $image_name. '.jpg" alt="">
+                          <img class="quizitems" src="../images/'. $image_name. '.jpg" width="200" height="150">
                         </a>
                         <center><input checked type="checkbox" name='. $image_name . ' value='. $image_name .' , id="doc">'. $image_name .'<br></center> <br>
                         

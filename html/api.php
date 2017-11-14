@@ -277,16 +277,81 @@ include("../config/connect.php");
 			echo "Error occured";
 		}
 	}
-	function is_doc($email,$conn)
-	{
-		echo $email;
-		$q = "SELECT * from `doctor` where `doctor`.member_email='$email'";
-		$result = $conn->query($q);
+
+
+	// subhashish - chat
+	function addChat($message,$caseId,$sentByCounsellor,$timestamp,$conn){
+
+		$add = "INSERT INTO chats(`message`,`sentByCounsellor`,`timestamp`,`case_caseid`)
+		values('$message','$sentByCounsellor','$timestamp','$caseId');";
+
+		$stmt = $conn->prepare($add);
+		$result=$stmt->execute();
 		
-		if ($result->num_rows>0) 
-		{
-			return 1;
-		}
-		return 0;
+
 	}
+
+	function isDoctor($id,$conn){
+
+		$stmt = "SELECT isDoc FROM member WHERE email='$id'";
+
+		$userResult = $conn->query($stmt);
+		$row = $userResult->fetch_assoc();
+		return $row["isDoc"];
+
+
+	}
+
+	function getCaseId($senderId,$receiverId,$isDoctor,$conn){
+		if($isDoctor==1){
+			$stmt = "SELECT caseid FROM `case` WHERE counsellor_email='$senderId' AND patient_email='$receiverId' AND isCompleted=0 ";
+		}
+		else{
+			$stmt = "SELECT caseid FROM `case` WHERE counsellor_email='$receiverId' AND patient_email='$senderId' AND isCompleted=0 ";
+		}
+
+		$userResult = $conn->query($stmt);
+		$row = $userResult->fetch_assoc();
+		return $row["caseid"];
+
+
+	}
+
+
+
+function getCurrentMaxChatId($caseId,$conn){
+		$stmt = "SELECT max(chatid) as `max` FROM chats WHERE case_caseid='$caseId'";
+		
+
+		$userResult = $conn->query($stmt);
+		$row = $userResult->fetch_assoc();
+		return $row["max"];
+
+
+	}
+
+
+
+
+function getChats($caseId,$latestId,$current_max,$isDoctor,$conn){
+
+	$stmt = "SELECT message, sentByCounsellor FROM chats WHERE case_caseid='$caseId' and chatid>'$latestId' order by `timestamp` ";
+	
+
+	$userResult = $conn->query($stmt);
+	// $row = $userResult->fetch_assoc();
+	// return $row["max"];
+	$myArray=array();
+
+  	while($row = $userResult->fetch_assoc()) {
+        $myArray[] = $row;
+	}
+	array_push($myArray,$current_max,$isDoctor);
+	return json_encode($myArray);
+
+
+	}
+
+
+
 ?>
