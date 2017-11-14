@@ -97,6 +97,7 @@ include("../config/connect.php");
 			$stmt->execute();
 		}
 	}
+	// get all the addictions from db
 	function getAddictions($conn)
 	{
 		$addictions = "SELECT addictionName FROM addictions;";
@@ -110,6 +111,25 @@ include("../config/connect.php");
 			while($row = mysqli_fetch_assoc($addictionsResult)) 
 			{
 				$addiction = $row["addictionName"];
+				array_push($addictionArray, "$addiction");
+			} 
+		}
+		return $addictionArray;
+
+	}
+
+	// get the addictions that the user had removed
+	function getAddictionsOfUser($email, $conn)
+	{
+		$addictions = "SELECT addictions_addictionName FROM member_had_addictions WHERE member_email='$email';";
+		$addictionsResult = $conn->query($addictions);
+		$addictionArray = array();
+
+		if ($addictionsResult->num_rows > 0) 
+		{
+			while($row = mysqli_fetch_assoc($addictionsResult)) 
+			{
+				$addiction = $row["addictions_addictionName"];
 				// echo $addiction;
 				array_push($addictionArray, "$addiction");
 			} 
@@ -118,6 +138,25 @@ include("../config/connect.php");
 		return $addictionArray;
 
 	}
+
+
+	function updateAddictions($email, $addictionArray, $conn)
+	{
+		$i = 0;
+			
+		$check = "DELETE FROM `addictionRemoval`.`member_had_addictions` WHERE `member_email`='$email';";
+		$addictionsResult = $conn->query($check);
+			
+		for($i;$i<sizeof($addictionArray);$i++)
+		{	
+
+			$add = "INSERT INTO `addictionRemoval`.`member_had_addictions` (`member_email`, `addictions_addictionName`) VALUES ('$email', '$addictionArray[$i]');";
+			$stmt = $conn->prepare($add);
+			$stmt->execute();
+		}
+
+	}
+
 
 	function isExistingCase($email,$addiction,$conn)
 	{

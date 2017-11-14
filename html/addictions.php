@@ -23,7 +23,7 @@
 				<a href="addi_form.php?' .$str. '='.$image_name.'" ><img src="../images/'. $image_name. '.jpg" alt="drugs" width="300" height="200" ></a>
 			<div class="desc">'. $addictionArray[$i]. '</div>
 			</div>';
-}
+	}
 ?>
 
 </body>
