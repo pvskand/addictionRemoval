@@ -11,17 +11,17 @@
 
    <link rel="stylesheet" href="../css/style_setting.css">
 	<script src="../js/homepage.js"></script>
-  <?php 
+</head>
+<body bgcolor="#C4EEA2">
+
+<?php 
 
 include("../config/connect.php");
 include("../html/api.php");
 require '../OAuth/google_auth.php';
+$is_doc_status = isDoc($email, $conn);
 
 ?>
-</head>
-<body style="background-color:powderblue;">
-
-
 
 
 
@@ -32,11 +32,20 @@ require '../OAuth/google_auth.php';
   <div id="seperate"> </div>
   <a href="#">Home</a><br>
   <a href="#">Chats</a><br>
-  <a href="addictions.php">Find Counselor</a><br>
+  <?php
+    if($is_doc_status == 1)
+    {
+      echo '<a href="blog.php">Blog</a><br>';
+    }
+    else
+    {
+      echo '<a href="addictions.php">Find Counselor</a><br>';
+    }
+  ?>
   <a href="#">Rewards</a><br>
   <a href="#">Rehabilitation Centers</a><br>
   <a href="settings.php">Settings</a><br>
-  <a href="#">Logout</a><br>
+  <a href="?logout"> Logout </a><br>
 </div>
 
 <div class="main">
@@ -54,8 +63,6 @@ require '../OAuth/google_auth.php';
   $HadAddictions = getAddictionsOfUser($email, $conn);
   $Addictions = getAddictions($conn);
   $leftAddictions = array_diff($Addictions, $HadAddictions); 
-  
-
 ?>
 
     <div class = "eleregis" id="firstlastname">
@@ -88,18 +95,17 @@ require '../OAuth/google_auth.php';
       <input type="text" name="city" <?php echo "value ='$getArray[4]'"; ?>  id="city">
       </div>
       <br>
-  
       <div class = "eleregis">
       <input type="submit" value="Save" onclick="submitForm()">
       <input type="reset" value="Reset">
       </div>
       <br>
-      
+
     </div>
     </center>
   </form>
 
-  <!-- This part shows the addictions -->
+   <!-- This part shows the addictions -->
   <form id="form" name="form" method="post" action="update_addi.php">
   <section> 
   <div class="quizimgblock">
@@ -109,38 +115,34 @@ require '../OAuth/google_auth.php';
         
         <?php
             $addictionArray = getAddictions($conn);
-            $str="addiction";
+            
             $i=0;
             for ($i;$i<count($addictionArray);$i++)
             {
               $image_name = strtolower($addictionArray[$i]);
+
               if (in_array($addictionArray[$i], $leftAddictions))
               {
-
               echo '<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                         <a href="" class="quiz-answer multiple-answers" data-question="1" data-answer="1">
+                          <img class="quizitems" src="../images/'. $image_name. '.jpg" alt="">
+                        </a>
+                        <center><input  type="checkbox" name='. $image_name . ' value='. $image_name .' , id="doc">'. $image_name .'<br></center> <br>
+                        
+                      </div>';
+              }
+              else
+              {
+                echo '<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                        <a href="" class="quiz-answer multiple-answers" data-question="1" data-answer="1">
+                          
                           <img class="quizitems" src="../images/'. $image_name. '.jpg" alt="">
                         </a>
                         <center><input checked type="checkbox" name='. $image_name . ' value='. $image_name .' , id="doc">'. $image_name .'<br></center> <br>
                         
                       </div>';
               }
-              else
-              {
-
-                echo '<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                        <a href="" class="quiz-answer multiple-answers" data-question="1" data-answer="1">
-                          
-                          <img class="quizitems" src="../images/'. $image_name. '.jpg" alt="">
-                        </a>
-                        <center><input type="checkbox" name='. $image_name . ' value='. $image_name .' , id="doc">'. $image_name .'<br></center> <br>
-                        
-                      </div>';
-
-
-              }
             }
-
         ?>
 
       </div>
@@ -151,13 +153,10 @@ require '../OAuth/google_auth.php';
 <div class = "eleregis">
       <center><input type="submit" value="Submit" id="submit_setting" "></center>
 </div>
-
 </form>
-
  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
 <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
-
     <!-- <script  src="../js/setting.js"></script> -->
   </div>
   

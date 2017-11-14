@@ -1,29 +1,32 @@
 <?php 
 include("../config/connect.php");
-
-
+	function isDoc($email, $conn)
+	{
+		$doc = "SELECT isDoc FROM member WHERE email='$email' LIMIT 1";
+		$docResult = $conn->query($doc);
+		$doc_status = "";
+		while($row = mysqli_fetch_assoc($docResult)) 
+		{
+			$doc_status = $row["isDoc"];
+		}
+		return $doc_status;
+	}
 // Get the doctor's name for writing in the feed from the Membe table
-
 	function getDocName($email, $conn) 
 	{
 		$doc = "SELECT * FROM member WHERE email='$email' LIMIT 1";
-
 		
 		$docResult = $conn->query($doc);
-
 		$doc_name = "";
 		while($row = mysqli_fetch_assoc($docResult)) 
 		{
 			$doc_name = $row["firstname"];
 		}
 		return $doc_name;
-
 	}
-
 	function userInDB($email, $conn)
 	{
 		$user = "SELECT * FROM member WHERE email='$email'";
-
 		$userResult = $conn->query($user);
 		if ($userResult->num_rows > 0) 
 		{
@@ -58,7 +61,6 @@ include("../config/connect.php");
 			} 
 		}
 		return $getArray;
-
 	}
 	// Update user
 	function updateUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $conn)
@@ -74,16 +76,29 @@ include("../config/connect.php");
 			return 0;
 		}
 	}
-
+	function updateAddictions($email, $addictionArray, $conn)
+	{
+		$i = 0;
+			
+		$check = "DELETE FROM `addictionRemoval`.`member_had_addictions` WHERE `member_email`='$email';";
+		$addictionsResult = $conn->query($check);
+			
+		for($i;$i<sizeof($addictionArray);$i++)
+		{	
+			$add = "INSERT INTO `addictionRemoval`.`member_had_addictions` (`member_email`, `addictions_addictionName`) VALUES ('$email', '$addictionArray[$i]');";
+			$stmt = $conn->prepare($add);
+			$stmt->execute();
+		}
+	}
 
 	function addUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $isDoc, $conn)
 	{
 		// $dateToday
 		$date = date('Y-m-d');
 		$add = "INSERT INTO member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
+		echo $add;
 		$stmt = $conn->prepare($add);
 		$stmt->execute();
-
 		if($isDoc == 1)
 		{
 			$add = "INSERT INTO `doctor`(`specialization`, `member_email`) VALUES ('dummy','$email')";
@@ -97,25 +112,22 @@ include("../config/connect.php");
 			$stmt->execute();
 		}
 	}
-	// get all the addictions from db
 	function getAddictions($conn)
 	{
 		$addictions = "SELECT addictionName FROM addictions;";
-
 		$addictionsResult = $conn->query($addictions);
 		$addictionArray = array();
-
-
 		if ($addictionsResult->num_rows > 0) 
 		{
 			while($row = mysqli_fetch_assoc($addictionsResult)) 
 			{
 				$addiction = $row["addictionName"];
+				// echo $addiction;
 				array_push($addictionArray, "$addiction");
 			} 
 		}
+		// echo $addictionArray[1];
 		return $addictionArray;
-
 	}
 
 	// get the addictions that the user had removed
@@ -124,7 +136,6 @@ include("../config/connect.php");
 		$addictions = "SELECT addictions_addictionName FROM member_had_addictions WHERE member_email='$email';";
 		$addictionsResult = $conn->query($addictions);
 		$addictionArray = array();
-
 		if ($addictionsResult->num_rows > 0) 
 		{
 			while($row = mysqli_fetch_assoc($addictionsResult)) 
@@ -136,28 +147,9 @@ include("../config/connect.php");
 		}
 		// echo $addictionArray[1];
 		return $addictionArray;
-
 	}
 
-
-	function updateAddictions($email, $addictionArray, $conn)
-	{
-		$i = 0;
-			
-		$check = "DELETE FROM `addictionRemoval`.`member_had_addictions` WHERE `member_email`='$email';";
-		$addictionsResult = $conn->query($check);
-			
-		for($i;$i<sizeof($addictionArray);$i++)
-		{	
-
-			$add = "INSERT INTO `addictionRemoval`.`member_had_addictions` (`member_email`, `addictions_addictionName`) VALUES ('$email', '$addictionArray[$i]');";
-			$stmt = $conn->prepare($add);
-			$stmt->execute();
-		}
-
-	}
-
-
+	
 	function isExistingCase($email,$addiction,$conn)
 	{
 		$q = "SELECT * from `case` where `case`.isCompleted = 0 and `case`.patient_email = '$email' and `case`.Addictions_addictionName = '$addiction'";
@@ -169,25 +161,18 @@ include("../config/connect.php");
 		}
 		return 0;
 	}
-
-
 	function Matching_algo($email,$addiction,$conn)
 	{
 		$q="SELECT member_had_addictions.member_email from member,member_had_addictions where member.isBanned=0 and member_had_addictions.addictions_addictionName='$addiction' and member.email=member_had_addictions.member_email";
 		$result=$conn->query($q);
-
 		
-
-
 		$data = array(); 
 		$count=0;
 		while($row = mysqli_fetch_assoc($result)) 
 		{
 			$data[] = $row;
 			$count++;
-
 		}
-
 		
 		$i=0;
 		while($i<$count)
@@ -204,8 +189,6 @@ include("../config/connect.php");
 			$data[$i]["isdoc"]=$row["isdoc"];
 			$i++;
 		}
-
-
 		$i=0;
 		$min=10000;
 		while($i<$count)
@@ -218,7 +201,6 @@ include("../config/connect.php");
 			
 			$i++;
 		}
-
 		$i=0;
 		$max_doc_rating=-1000; $max_doc_index = -1;
 		$max_user_rating=-1000; $max_user_index = -1;
@@ -242,7 +224,6 @@ include("../config/connect.php");
 			$i++;
 		}
 		$i=0;
-
 		if($max_doc_index == -1 && $max_user_index == -1)
 		{
 			echo 'no user found';
@@ -274,10 +255,7 @@ include("../config/connect.php");
 			}
 		}
 		
-
 	}
-
-
 	function update_case_table($conn,$counsellor_email,$patient_email,$add_type)
 	{
 		$date = date('Y-m-d');
@@ -285,8 +263,30 @@ include("../config/connect.php");
 		$stmt = $conn->prepare($q);
 		$stmt->execute();
 	}
-
-
-
-
+	function add_blog($conn,$msg,$title,$time,$email)
+	{
+		$add_blog="INSERT INTO blog (`message`, `title`, `timestamp`, `doctor_member_email`) VALUES ('$msg', '$title', '$time', '$email');";
+		echo $add_blog;
+		$stmt = $conn->prepare($add_blog);
+		if($stmt==true)
+		{
+			$stmt->execute();
+		}
+		else
+		{
+			echo "Error occured";
+		}
+	}
+	function is_doc($email,$conn)
+	{
+		echo $email;
+		$q = "SELECT * from `doctor` where `doctor`.member_email='$email'";
+		$result = $conn->query($q);
+		
+		if ($result->num_rows>0) 
+		{
+			return 1;
+		}
+		return 0;
+	}
 ?>
