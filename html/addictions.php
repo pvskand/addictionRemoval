@@ -12,22 +12,22 @@
     <img src="../images/profile.png" id="profilePhoto" />
   </div>
   <div id="seperate"> </div>
-  <a href="index.php">Home</a><br>
-  <a href="chat.php">Chats</a><br>
+  <a href="index.php"> <img src = "../images/home.png" class="icon"/> Home </a><br>
+  <a href="chat.php"><img src = "../images/message.png" class="icon"/> Chats </a><br>
   <?php
     if($is_doc_status == 1)
     {
-      echo '<a href="blog.php">Blog</a><br>';
+      echo '<a href="blog.php"><img src = "../images/blog.png" class="icon"/> Blog</a><br>';
     }
     else
     {
-      echo '<a href="addictions.php">Find Counselor</a><br>';
+      echo '<a href="addictions.php"><img src = "../images/person.png" class="icon"/> Find Counselor</a><br>';
     }
   ?>
   <a href="#">Rewards</a><br>
-  <a href="#">Rehabilitation Centers</a><br>
-  <a href="settings.php">Settings</a><br>
-  <a href="?logout"> Logout </a><br>
+  <a href="#"><img src = "../images/hospital.png" class="icon"/> Rehabilitation Centers</a><br>
+  <a href="setting.php"> <img src = "../images/setting.png" class="icon"/> Settings </a><br>
+  <a href="?logout"> <img src = "../images/logout.png" class="icon"/> Logout </a><br>
 </div>
 
 
@@ -46,8 +46,8 @@
 		$image_name = strtolower($addictionArray[$i]);
 		echo '
 			<div class="gallery">
-				<a href="addi_form.php?' .$str. '='.$image_name.'" ><img src="../images/'. $image_name. '.jpg" alt="drugs" width="300" height="200" ></a>
-			<div class="desc">'. $addictionArray[$i]. '</div>
+				<a href="addi_form.php?' .$str. '='.$image_name.'" ><img class= "addictionsList" src="../images/'. $image_name. '.jpg" alt="drugs" width="300" height="200" ></a>
+			<center><p class="desc" >'. $addictionArray[$i]. '</p><center>
 			</div>';
 	}
 ?>

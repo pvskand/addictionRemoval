@@ -351,6 +351,86 @@ function getChats($caseId,$latestId,$current_max,$isDoctor,$conn){
 
 
 	}
+function report($conn,$type,$description,$reporter,$toBeReportedUser){
+	$query = "INSERT INTO report(`type`,`email`,`member_email`,`description`) VALUES ('$type','$reporter','$toBeReportedUser','$description');";
+	$stmt = $conn->prepare($query);
+	$result=$stmt->execute();
+
+	$query = "SELECT rating FROM member WHERE email='$toBeReportedUser'";
+	$queryResult = $conn->query($query);
+	$row = $queryResult->fetch_assoc();
+	$reportedUserCurrentRating = $row["rating"];
+
+	$q="SELECT count(member_email) FROM `report` WHERE `report`.member_email= '$toBeReportedUser'";
+	$result=$conn->query($q);
+	$row = mysqli_fetch_assoc($result);
+	$currentNumberOfReports = $rot["count(member_email)"];
+
+	if(currentNumberOfReports>3){
+		$reportedUserCurrentRating = $reportedUserCurrentRating - 200 - 25;		//report and ban
+		$date = date('Y-m-d');	
+		$stmt = "UPDATE member SET  isBanned = 1, accountBannedOn = '$date' WHERE email='$toBeReportedUser'";
+		$getUpdate = $conn->query($stmt);
+	} 
+	else {
+		$reportedUserCurrentRating = $reportedUserCurrentRating - 25;		//just report
+	}
+
+	$stmt = "UPDATE member SET  rating = $reportedUserCurrentRating WHERE email='$toBeReportedUser'";
+	$getUpdate = $conn->query($stmt);
+}
+
+function updateRating($conn,$numStars,$patient_email,$counsellor_email,$add_type){
+	
+	$query = "SELECT rating FROM member WHERE email='$counsellor_email'";
+	$queryResult = $conn->query($query);
+	$row = $queryResult->fetch_assoc();
+	$counsellorCurrentRating = $row["rating"];
+
+	if($numStars==5){
+		$counsellorCurrentRating = $counsellorCurrentRating + 200;
+		$stmt = "UPDATE member SET  rating = $counsellorCurrentRating WHERE email='$counsellor_email'";
+	}
+	else if($numStars==4){
+		$counsellorCurrentRating = $counsellorCurrentRating + 150;
+		$stmt = "UPDATE member SET  rating = $counsellorCurrentRating WHERE email='$counsellor_email'";
+	}
+	else if($numStars==3){
+		$counsellorCurrentRating = $counsellorCurrentRating + 100;
+		$stmt = "UPDATE member SET  rating = $counsellorCurrentRating WHERE email='$counsellor_email'";
+	}
+	else if($numStars==2){
+		$counsellorCurrentRating = $counsellorCurrentRating + 50;
+		$stmt = "UPDATE member SET  rating = $counsellorCurrentRating WHERE email='$counsellor_email'";
+	}
+	else if($numStars==1){
+		$counsellorCurrentRating = $counsellorCurrentRating + 20;
+		$stmt = "UPDATE member SET  rating = $counsellorCurrentRating WHERE email='$counsellor_email'";
+	}
+	$getUpdate = $conn->query($stmt);
+
+	$stmt = "UPDATE `case` SET isCompleted=1 WHERE counsellor_email='$counsellor_email' AND patient_email='$patient_email' AND addictions_addictionName='$add_type' AND isCompleted=0 ";
+	$getUpdate = $conn->query($stmt);
+
+	$query = "SELECT currentCasesBeingHandled FROM member WHERE email='$counsellor_email'";
+	$queryResult = $conn->query($query);
+	$row = $queryResult->fetch_assoc();
+	$currentCasesSolved = $row["currentCasesBeingHandled"];
+	$currentCasesSolved = $currentCasesSolved + 1;
+
+	if($currentCasesSolved>10){
+		$stmt = "UPDATE member SET  currentCasesBeingHandled = 0 WHERE email='$counsellor_email'";
+		$getUpdate = $conn->query($stmt);
+
+		$stmt = "DELETE FROM report WHERE member_email = '$counsellor_email'";
+		$addictionsResult = $conn->query($stmt);
+	}
+	else {
+		$stmt = "UPDATE member SET  currentCasesBeingHandled = 0 WHERE email='$counsellor_email'";
+		$getUpdate = $conn->query($stmt);		
+	}
+
+}
 
 
 

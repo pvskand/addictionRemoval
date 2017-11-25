@@ -1,21 +1,4 @@
-#pageTitle{
-    font-family: Times;
-    color: #F8F8F8;
-}
 
-#pageHeaderDiv{
-    background-color: #42830D;
-    position: fixed;
-    top: 10px;
-    display: table;
-    height: 100px;
-    vertical-align:middle;
-    margin-bottom: 100px;
-    width: 80%;
-    text-align: center;
-    margin-bottom: 5px;
-    border-radius: 10px;
-}
 
 #profilePhoto{
     height: 200px;
@@ -50,6 +33,11 @@
     padding-top: 20px;
 }
 
+.icon{
+    height: 20px;
+    width: 20px;
+}
+
 .sidenav a {
     padding: 6px 6px 6px 32px;
     text-decoration: none;
@@ -74,13 +62,15 @@
 .divBlog{
     background-color: #FFFEFE;
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    box-shadow: 5px 5px 5px #0e0e0e;
 }
 
 .blogTitle{
     font-size: 30px;
     font-family: sans-serif;
+    text-shadow: 1px 1px #555555;
 }
 
 .blogContent{

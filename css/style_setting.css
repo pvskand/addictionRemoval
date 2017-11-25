@@ -10,8 +10,6 @@
 }
 
 .quizimgblock img.quizitems {
-  width: 100%;
-  height: auto;
 }
 .quizimgblock a:hover img{
   opacity: 0.5;

@@ -126,22 +126,22 @@ $is_doc_status = isDoc($email, $conn);
     <img src="../images/profile.png" id="profilePhoto" />
   </div>
   <div id="seperate"> </div>
-  <a href="index.php">Home</a><br>
-  <a href="chat.php">Chats</a><br>
+  <a href="index.php"><img src = "../images/home.png" class="icon"/> Home</a><br>
+  <a href="chat.php"><img src = "../images/message.png" class="icon"/> Chats</a><br>
   <?php
     if($is_doc_status == 1)
     {
-      echo '<a href="blog.php">Write Blog</a><br>';
+      echo '<a href="blog.php"> <img src = "../images/blog.png" class="icon"/> Write Blog</a><br>';
     }
     else
     {
-      echo '<a href="addictions.php">Find Counselor</a><br>';
+      echo '<a href="addictions.php"><img src = "../images/person.png" class="icon"/> Find Counselor</a><br>';
     }
   ?>
   <a href="#">Rewards</a><br>
-  <a href="#">Rehabilitation Centers</a><br>
-  <a href="settings.php">Settings</a><br>
-  <a href="?logout"> Logout </a><br>
+  <a href="#"><img src = "../images/hospital.png" class="icon"/> Rehabilitation Centers</a><br>
+  <a href="setting.php"><img src = "../images/setting.png" class="icon"/>  Settings</a><br>
+  <a href="?logout"><img src = "../images/logout.png" class="icon"/> Logout </a><br>
 </div>
 
 <div class="main">
