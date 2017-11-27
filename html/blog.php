@@ -2,22 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Write your own Blog !</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+  <link rel="stylesheet" href="../css/homepage.css" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" src="../tinymce/js/tinymce/tinymce.js"></script>
 </head>
 <body>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+font-family: 'Roboto Slab', serif;
+font-size: 25px;
+</style>
 <?php 
 
 include("../config/connect.php");
 include("../html/api.php");
 require '../OAuth/google_auth.php';
 
+if($email == null){
+      header("Location:http://localhost/addictionRemoval/OAuth/google_auth.php");
+    }
 ?>
 
     <form action="form_handler.php" method="post">
 
     <div>
-    <input type="textarea" name="title" placeholder="add title" cols="80" rows="5" font-size="10px">
+    <center> 
+    <h1 id="headingPage"> Write Blog </h1>
+    <input id ="blogTitle" type="textarea" name="title" placeholder="Add title" cols="500" rows="5" font-size="20px"> <center><br>
     </div>
 
     <div>
@@ -39,8 +51,8 @@ require '../OAuth/google_auth.php';
 
 
 </script>
-      </script>
-      <input type="submit" value="Submit" id="submit_button" />
+      </script><br>
+      <center><input type="submit" value="Submit" id="submit_button" /></center>  
     </div>
 
     

@@ -6,9 +6,9 @@ div.gallery {
 }
 
 .addictionsList:hover{
-    -moz-box-shadow: 0 0 10px #c4f52e;
-    -webkit-box-shadow: 0 0 10px #c4f52e;
-    box-shadow: 0 10px 20px #c4f52e;
+    -moz-box-shadow: 0 0 10px #FF4081;
+    -webkit-box-shadow: 0 0 10px #FF4081;
+    box-shadow: 0 5px 15px #D32F2F; 
 }
 
 div.gallery img {
@@ -18,9 +18,8 @@ div.gallery img {
 
 .desc {
     font-size: 25px;
-    font-family: verdana;
-    color: #f1f1f1;
-    text-shadow: 3px 2px #212121;
+    font-family: 'Roboto Slab', serif;
+    color: #212121;
 }
 
 .icon{

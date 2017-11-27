@@ -1,14 +1,22 @@
 #titleHeader{
-	font-family: Verdana;
-	color: #e3e3e3;
+	font-family: 'Roboto Slab', serif;
+    text-shadow: 1px 1px #555555;
+    font-size: 40px;
 }
 
 #aboutApp{
-	font-family: Verdana;
-	color: #e3e3e3;
-	font-size: 20px;
+	font-family: 'Roboto Slab', serif;
+    text-shadow: 1px 1px #555555;
+    font-size: 25px;
+    font-color : #212121;
 }
 
 #boxLogin{
+	margin-top: 20px;
 	width: 50%;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	box-shadow: 3px 3px 10px #020202;
+	background-color: #D32F2F;
 }

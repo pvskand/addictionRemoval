@@ -12,6 +12,11 @@
     cursor: pointer;
 }
 
+#headingChat{
+    font-family: 'Roboto Slab', serif;
+}
+
+
 .ui-chatbox-content {
     padding: 0px;
     margin: 0px;

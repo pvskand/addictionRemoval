@@ -1,8 +1,9 @@
 <?php
 include("../config/connect.php");
-include("api.php");
+include("../html/api.php");
 
 set_time_limit(0);
+
 while (true) {
 
     if(!isset($_GET['receiverId'])){
@@ -15,21 +16,22 @@ while (true) {
     
     $receiverId = $_GET['receiverId'];
 
-    $isDoctor=isDoctor($senderId,$conn);
+    // $isDoctor=isDoctor($senderId,$conn);
+    $isPatient= $_GET['isPatient'];
     
-    $caseId=getCaseId($senderId,$receiverId,$isDoctor,$conn);
+    $caseId=getCaseId($senderId,$receiverId,$isPatient,$conn);
     
     $current_max=getCurrentMaxChatId($caseId,$conn);
     
-    if($current_max==null){
-        break;
-    }
+    // if($current_max==null){
+    //     break;
+    // }
     
     clearstatcache();
 
-    if ($current_max > $latestId) {
+    if ( $current_max!=NULL &&  $current_max > $latestId) {
 
-        $result=getChats($caseId,$latestId,$current_max,$isDoctor,$conn);
+        $result=getChats($caseId,$latestId,$current_max,$isPatient,$conn);
         // // get content of data.txt
         // $data = file_get_contents($data_source_file);
 
@@ -53,5 +55,3 @@ while (true) {
         continue;
     }
 }
-
-?>

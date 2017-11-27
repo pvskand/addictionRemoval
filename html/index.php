@@ -3,15 +3,31 @@
 <head>
   <title>HomePage</title>
    <link rel="stylesheet" type="text/css" href="../css/homepage.css">
+   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
   <script src="../js/homepage.js"></script>
 </head>
-<body bgcolor="#C4EEA2">
+<body>
 
 <?php 
 require '../OAuth/google_auth.php';
 include("../config/connect.php");
 include("../html/api.php");
 $is_doc_status = isDoc($email, $conn);
+
+$result = checkBan($email,$conn);
+
+if($result == 0)
+{
+  echo '<script type="text/javascript">'; 
+  echo 'alert("You are banned for the moment for getting too many reports. Try again later.");'; 
+  echo 'window.location.href = "?logout";';
+  echo '</script>';
+}
+
+$sudo=getPseudonym($email,$conn);
+$rating=getRating($email,$conn);
+$comname = $name." (".$sudo.")";
+
 ?>
 
 
@@ -20,10 +36,16 @@ $is_doc_status = isDoc($email, $conn);
   <div id="profileDiv"> 
     <img src="../images/profile.png" id="profilePhoto" />
   </div>
+
+  <center><h3 id='personName'> <?php echo($comname); ?></h3></center>
+  <center><h3 id='personName'> Rating: <?php echo($rating); ?></h3></center>
   <div id="seperate"> </div>
   <a href="index.php"><img src = "../images/home.png" class="icon"/> Home</a><br>
   <a href="chat.php"><img src = "../images/message.png" class="icon"/> Chats</a><br>
   <?php
+    if($email == null){
+      header("Location:http://localhost/addictionRemoval/OAuth/google_auth.php");
+    }
     if($is_doc_status == 1)
     {
       echo '<a href="blog.php"><img src = "../images/blog.png" class="icon"/> Write Blog</a><br>';
@@ -34,8 +56,7 @@ $is_doc_status = isDoc($email, $conn);
     }
   ?>
   <!-- <a href="addictions.php">Find Counselor</a><br> -->
-  <a href="#">Rewards</a><br>
-  <a href="#"> <img src = "../images/hospital.png" class="icon"/> Rehabilitation Centers</a><br>
+  <a href="rehab.php"> <img src = "../images/hospital.png" class="icon"/> Rehabilitation Centers</a><br>
   <a href="setting.php"> <img src = "../images/setting.png" class="icon"/> Settings</a><br>
   <a href="?logout"><img src = "../images/logout.png" class="icon"/> Logout </a><br>
 </div>
@@ -55,7 +76,7 @@ if ($blogResult->num_rows > 0)
         $email = $row["doctor_member_email"];
         $docName = getDocName($email, $conn);
         echo '<div class="divBlog"> 
-        <p class ="blogTitle">'. $row["title"]. '</p> <p class="docNameBlog"> Dr.'.$docName.'</p>
+        <h2 class ="blogTitle">'. $row["title"]. '</h2> <p class="docNameBlog"> Dr. '.$docName.'</p>
         <p class="blogContent">'.$row["message"]. '</p>
         </div>';
        

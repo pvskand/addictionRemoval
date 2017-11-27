@@ -14,6 +14,15 @@
     width: auto;
 }
 
+#logoutBtn{
+    background: transparent;
+    border: none;
+    font-size: 0px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
 #seperate{
     height: 1px;
     margin-bottom: 10px;
@@ -22,15 +31,25 @@
 }
 
 .sidenav {
-    height: 100%;
-    width: 20%;
+    height:100%;
+    width: 19%;
+    font-family: 'Roboto Slab', serif;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #0F1708;
+    background-color: #455A64;
     overflow-x: hidden;
     padding-top: 20px;
+    box-shadow: 3px 3px 10px #020202;
+    border-radius: 5px;
+}
+
+input[type=textarea] {
+    width: 50%; 
+    height: 25px;
+    border: none;
+    border-bottom: 2px solid red;
 }
 
 .icon{
@@ -38,20 +57,39 @@
     width: 20px;
 }
 
+#headingPage{
+    font-family: 'Roboto Slab', serif;
+    font-size: 35px;
+    color: #020202;
+}
+#headingTable{
+    font-family: 'Roboto Slab', serif;
+    font-size: 35px;
+    color: #020202;
+}
+
 .sidenav a {
     padding: 6px 6px 6px 32px;
     text-decoration: none;
+    font-family: 'Roboto Slab', serif;
     font-size: 25px;
     color: #e0e0e0;
     display: block;
+    margin: 0px;
 }
 
 .sidenav a:hover {
-    color: #c4f52e;
+    background-color: #D32F2F;
 }
 
 .main {
     margin-left: 20%; /* Same as the width of the sidenav */
+}
+
+#personName{
+    font-family: 'Roboto Slab', serif;
+    font-size: 20px;
+    color: #e0e0e0;
 }
 
 @media screen and (max-height: 450px) {
@@ -60,25 +98,54 @@
 }
 
 .divBlog{
-    background-color: #FFFEFE;
-    padding: 10px;
-    margin-bottom: 15px;
-    margin-left: 5px;
-    box-shadow: 5px 5px 5px #0e0e0e;
+    background-color: #D32F2F; 
+    padding: 20px;
+    width: 70%;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 3px 3px 10px #020202;
+    opacity: 0.8;
+    border-radius: 5px;
 }
 
+input[type=submit] {
+    background-color: #D32F2F;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
 .blogTitle{
+    margin: 0px;
     font-size: 30px;
-    font-family: sans-serif;
+    font-family: 'Roboto Slab', serif;
     text-shadow: 1px 1px #555555;
+    color : #030303;
 }
 
 .blogContent{
-    font-family: Verdana;
+    font-family: 'Roboto Slab', serif;
     font-size: 20px;
+    color : #f1f1f1;
+}
+
+.divBlog > p, h1, h3, h4, h6 {
+    font-family: 'Roboto Slab', serif;
+    font-size: 20px;
+    color : #f1f1f1;
 }
 
 .docNameBlog{
+    color : #f1f1f1;
     font-size: 15px;
-    font-family: Arial;
+    font-family: 'Roboto Slab', serif;
+}
+
+td {
+
 }

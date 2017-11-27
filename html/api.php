@@ -94,8 +94,16 @@ include("../config/connect.php");
 	function addUser($email, $firstname, $lastname, $phonenumber, $dob, $city, $isDoc, $conn)
 	{
 		// $dateToday
+		
+
+    $str = file_get_contents('./names.json');
+    $jsonArray = json_decode($str,true);
+    $rand_keys = array_rand($jsonArray, 1);
+    $pseudonym = $jsonArray[$rand_keys];
+
+
 		$date = date('Y-m-d');
-		$add = "INSERT INTO member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc');";
+		$add = "INSERT INTO member (`firstname`, `lastname`, `email`, `rating`, `accountCreatedOn`, `phoneNumber`, `city`, `dob`, `isBanned`, `isDoc`,`currentCasesBeingHandled`,`pseudonym`) VALUES ('$firstname', '$lastname', '$email', '1000', '$date', '$phonenumber', '$city', '$dob', '0', '$isDoc','0','$pseudonym');";
 		echo $add;
 		$stmt = $conn->prepare($add);
 		$stmt->execute();
@@ -173,24 +181,38 @@ include("../config/connect.php");
 			$data[] = $row;
 			$count++;
 		}
-		
+		$temp=0;
 		$i=0;
 		while($i<$count)
 		{
 			$name=$data[$i]["member_email"];
+			
+			$q="SELECT counsellor_email FROM `case` WHERE `case`.patient_email = '$email' AND `case`.counsellor_email='$name' AND `case`.isCompleted=0";
+			$result = $conn->query($q);
+			$q="SELECT counsellor_email FROM `case` WHERE `case`.patient_email = '$name' AND `case`.counsellor_email='$email' AND `case`.isCompleted=0";
+			$resultInverse = $conn->query($q);
+
+			if($result->num_rows>0 || $resultInverse->num_rows>0)
+			{
+				$i++;
+				continue;
+			}
+
 			$q="SELECT count(counsellor_email) FROM `case` WHERE `case`.counsellor_email= '$name'";
 			$result=$conn->query($q);
 			$row = mysqli_fetch_assoc($result);
-			$data[$i]["count(counsellor_email)"]=$row["count(counsellor_email)"];
+			$data[$temp]["count(counsellor_email)"]=$row["count(counsellor_email)"];
 			$q="SELECT rating,isdoc FROM member WHERE member.email='$name'";
 			$result = $conn->query($q);
 			$row = mysqli_fetch_assoc($result);
-			$data[$i]["rating"]=$row["rating"];
-			$data[$i]["isdoc"]=$row["isdoc"];
+			$data[$temp]["rating"]=$row["rating"];
+			$data[$temp]["isdoc"]=$row["isdoc"];
+			$temp++;
 			$i++;
 		}
 		$i=0;
 		$min=10000;
+		$count = $temp;
 		while($i<$count)
 		{
 			
@@ -266,7 +288,6 @@ include("../config/connect.php");
 	function add_blog($conn,$msg,$title,$time,$email)
 	{
 		$add_blog="INSERT INTO blog (`message`, `title`, `timestamp`, `doctor_member_email`) VALUES ('$msg', '$title', '$time', '$email');";
-		echo $add_blog;
 		$stmt = $conn->prepare($add_blog);
 		if($stmt==true)
 		{
@@ -280,20 +301,23 @@ include("../config/connect.php");
 
 
 	// subhashish - chat
-	function addChat($message,$caseId,$sentByCounsellor,$timestamp,$conn){
+function addChat($message,$caseId,$isPatient,$timestamp,$conn){
 
+		$sentByCounsellor=$isPatient==1?0:1;
 		$add = "INSERT INTO chats(`message`,`sentByCounsellor`,`timestamp`,`case_caseid`)
 		values('$message','$sentByCounsellor','$timestamp','$caseId');";
 
 		$stmt = $conn->prepare($add);
 		$result=$stmt->execute();
+
+		return $result;
 		
 
 	}
 
 	function isDoctor($id,$conn){
 
-		$stmt = "SELECT isDoc FROM member WHERE email='$id'";
+		$stmt = "SELECT isDoc FROM Member WHERE email='$id'";
 
 		$userResult = $conn->query($stmt);
 		$row = $userResult->fetch_assoc();
@@ -302,8 +326,8 @@ include("../config/connect.php");
 
 	}
 
-	function getCaseId($senderId,$receiverId,$isDoctor,$conn){
-		if($isDoctor==1){
+	function getCaseId($senderId,$receiverId,$isPatient,$conn){
+		if($isPatient==0){
 			$stmt = "SELECT caseid FROM `case` WHERE counsellor_email='$senderId' AND patient_email='$receiverId' AND isCompleted=0 ";
 		}
 		else{
@@ -325,6 +349,9 @@ function getCurrentMaxChatId($caseId,$conn){
 
 		$userResult = $conn->query($stmt);
 		$row = $userResult->fetch_assoc();
+		if($row==NULL)
+			return 0;
+
 		return $row["max"];
 
 
@@ -333,7 +360,7 @@ function getCurrentMaxChatId($caseId,$conn){
 
 
 
-function getChats($caseId,$latestId,$current_max,$isDoctor,$conn){
+function getChats($caseId,$latestId,$current_max,$isPatient,$conn){
 
 	$stmt = "SELECT message, sentByCounsellor FROM chats WHERE case_caseid='$caseId' and chatid>'$latestId' order by `timestamp` ";
 	
@@ -346,13 +373,13 @@ function getChats($caseId,$latestId,$current_max,$isDoctor,$conn){
   	while($row = $userResult->fetch_assoc()) {
         $myArray[] = $row;
 	}
-	array_push($myArray,$current_max,$isDoctor);
+	array_push($myArray,$current_max,$isPatient);
 	return json_encode($myArray);
 
 
 	}
-function report($conn,$type,$description,$reporter,$toBeReportedUser){
-	$query = "INSERT INTO report(`type`,`email`,`member_email`,`description`) VALUES ('$type','$reporter','$toBeReportedUser','$description');";
+function report($conn,$description,$reporter,$toBeReportedUser){
+	$query = "INSERT INTO report(`email`,`member_email`,`description`) VALUES ('$reporter','$toBeReportedUser','$description');";
 	$stmt = $conn->prepare($query);
 	$result=$stmt->execute();
 
@@ -364,9 +391,9 @@ function report($conn,$type,$description,$reporter,$toBeReportedUser){
 	$q="SELECT count(member_email) FROM `report` WHERE `report`.member_email= '$toBeReportedUser'";
 	$result=$conn->query($q);
 	$row = mysqli_fetch_assoc($result);
-	$currentNumberOfReports = $rot["count(member_email)"];
+	$currentNumberOfReports = $row["count(member_email)"];
 
-	if(currentNumberOfReports>3){
+	if($currentNumberOfReports>3){
 		$reportedUserCurrentRating = $reportedUserCurrentRating - 200 - 25;		//report and ban
 		$date = date('Y-m-d');	
 		$stmt = "UPDATE member SET  isBanned = 1, accountBannedOn = '$date' WHERE email='$toBeReportedUser'";
@@ -426,12 +453,123 @@ function updateRating($conn,$numStars,$patient_email,$counsellor_email,$add_type
 		$addictionsResult = $conn->query($stmt);
 	}
 	else {
-		$stmt = "UPDATE member SET  currentCasesBeingHandled = 0 WHERE email='$counsellor_email'";
+		$stmt = "UPDATE member SET  currentCasesBeingHandled = '$currentCasesSolved' WHERE email='$counsellor_email'";
 		$getUpdate = $conn->query($stmt);		
 	}
 
 }
 
 
+function closeCase($conn,$patient_email,$counsellor_email,$add_type){
+	
+	$query = "SELECT rating FROM member WHERE email='$counsellor_email'";
+	$queryResult = $conn->query($query);
+	$row = $queryResult->fetch_assoc();
+	$counsellorCurrentRating = $row["rating"];
+
+	$stmt = "UPDATE `case` SET isCompleted=1 WHERE counsellor_email='$counsellor_email' AND patient_email='$patient_email' AND addictions_addictionName='$add_type' AND isCompleted=0 ";
+	$getUpdate = $conn->query($stmt);
+	echo $stmt;
+	$query = "SELECT currentCasesBeingHandled FROM member WHERE email='$counsellor_email'";
+	$queryResult = $conn->query($query);
+	$row = $queryResult->fetch_assoc();
+	$currentCasesSolved = $row["currentCasesBeingHandled"];
+	$currentCasesSolved = $currentCasesSolved + 1;
+
+	if($currentCasesSolved>10){
+		$stmt = "UPDATE member SET  currentCasesBeingHandled = 0 WHERE email='$counsellor_email'";
+		$getUpdate = $conn->query($stmt);
+
+		$stmt = "DELETE FROM report WHERE member_email = '$counsellor_email'";
+		$addictionsResult = $conn->query($stmt);
+	}
+	else {
+		$stmt = "UPDATE member SET  currentCasesBeingHandled = '$currentCasesSolved' WHERE email='$counsellor_email'";
+
+		$getUpdate = $conn->query($stmt);		
+	}
+
+}
+
+// pseudonym generated 
+function getPseudonym($email,$conn)
+	{
+		$q = "SELECT pseudonym FROM member WHERE email = '$email';";
+		$result = $conn->query($q);
+
+		$row = mysqli_fetch_assoc($result);
+		$pseudonym = $row["pseudonym"];
+		return $pseudonym;
+	}
+
+function getRating($email,$conn)
+	{
+		$q = "SELECT rating FROM member WHERE email = '$email';";
+		$result = $conn->query($q);
+
+		$row = mysqli_fetch_assoc($result);
+		$rating = $row["rating"];
+		return $rating;
+	}
+
+
+	function getcenters($conn)
+{
+	$q="SELECT * from `rehab_centre`;";
+		$result=$conn->query($q);
+		
+		$data = array(); 
+		$count=0;
+		while($row = mysqli_fetch_assoc($result)) 
+		{
+			$data[] = $row;
+			$count++;
+		}
+
+		return $data;
+}
+
+
+
+
+	function checkBan($email,$conn){
+
+		$q = "SELECT isBanned,accountBannedOn FROM member WHERE email = '$email'";
+		$result = $conn->query($q);
+		$row = mysqli_fetch_assoc($result);
+		$isBanned = $row["isBanned"];
+		$accountBannedOn = $row["accountBannedOn"];
+
+		if($isBanned == 1)
+		{
+			$date = date('Y-m-d');
+			$date1 = date_create($date);
+			$date2 = date_create($accountBannedOn);
+			
+			$nbDays = $date1->diff($date2);
+			
+			if($nbDays->days>7)
+			{
+				$q="UPDATE member SET isBanned = 0 WHERE email = '$email'";
+				$getUpdate = $conn->query($q);
+
+				$stmt = "DELETE FROM report WHERE member_email = '$email'";
+				$addictionsResult = $conn->query($stmt);
+
+				$stmt = "UPDATE member SET  currentCasesBeingHandled = 0 WHERE email='$email'";
+				$getUpdate = $conn->query($stmt);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else 
+		{
+			return true;
+		}
+
+	}
 
 ?>

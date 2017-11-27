@@ -3,6 +3,8 @@
   margin-bottom: 2em;
 }
 
+
+
 .wrapper {
   display: inline-block;
   vertical-align: top;
@@ -12,7 +14,7 @@
 .quizimgblock img.quizitems {
 }
 .quizimgblock a:hover img{
-  opacity: 0.5;
+  box-shadow: 3px 3px 10px #D32F2F; 
 }
 .quizimgblock .check {
   position: absolute;
@@ -38,8 +40,6 @@
   opacity: 1 !important;
 }
 
-
-
 .quizbutton {
   text-align: center;
   margin: 1.25em auto 3em;
@@ -53,7 +53,7 @@
   -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), inset 0 1px rgba(255, 255, 255, 0.6);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), inset 0 1px rgba(255, 255, 255, 0.6);
   border: solid 1px #f06c0b;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto Slab', serif;
   font-size: 16px;
   line-height: 16px;
   text-transform: uppercase;
